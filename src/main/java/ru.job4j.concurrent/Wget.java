@@ -44,12 +44,12 @@ public class Wget implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        if (args.length < 3) {
+            throw new IllegalArgumentException("wrong params!");
+        }
         String url = args[0];
         int speed = Integer.parseInt(args[1]);
         String output = args[2];
-        if (args.length != 3) {
-            throw new IllegalArgumentException("url is null");
-        }
         Thread wget = new Thread(new Wget(url, speed, output));
         wget.start();
         wget.join();
