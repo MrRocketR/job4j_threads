@@ -9,38 +9,27 @@ public class AccountStorage {
     public boolean add(Account account) {
         synchronized (accounts) {
             account = accounts.putIfAbsent(account.getId(), account);
-            if (account != null) {
-                return true;
-            }
         }
-        return false;
+        return account != null;
     }
 
     public boolean update(Account account) {
         synchronized (accounts) {
-            int amount = account.getAmount();
-            account = accounts.get(account.getId());
-            if (account != null) {
-                account.setAmount(amount);
-                return true;
-            }
+            account = accounts.replace(account.getId(), account);
+            return account != null;
         }
-        return false;
     }
 
     public boolean delete(int id) {
         synchronized (accounts) {
             Account account = accounts.remove(id);
-            if (account != null) {
-                return true;
-            }
+            return account != null;
         }
-        return false;
     }
 
     public Optional<Account> getById(int id) {
         synchronized (accounts) {
-            return Optional.of(accounts.get(id));
+            return Optional.ofNullable(accounts.get(id));
         }
     }
 
@@ -48,12 +37,14 @@ public class AccountStorage {
         synchronized (accounts) {
             Account accountFrom = accounts.get(fromId);
             Account accountTo = accounts.get(toId);
-            if (accountFrom != null || accountTo != null) {
+            if (accountFrom != null
+                    && accountTo != null
+                    && accountFrom.getAmount() >= amount) {
                 accountFrom.setAmount(accountFrom.getAmount() - amount);
                 accountTo.setAmount(accountTo.getAmount() + amount);
                 return true;
             }
+            return false;
         }
-        return false;
     }
 }

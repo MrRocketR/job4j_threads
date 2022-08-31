@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 public class AccountStorageTest {
@@ -27,13 +29,13 @@ public class AccountStorageTest {
         Assert.assertEquals(firstAccount.getAmount(), 200);
     }
 
-    @Ignore
+
     @Test
     public void whenDelete() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.delete(1);
-        Assert.assertNull(storage.getById(1));
+        Assert.assertEquals(Optional.empty(), storage.getById(1));
 
     }
 
