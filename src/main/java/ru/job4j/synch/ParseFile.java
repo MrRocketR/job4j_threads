@@ -10,19 +10,27 @@ public final class ParseFile {
         this.file = file;
     }
 
-    public synchronized String getContent(Predicate<Integer> filter) {
-        String output = "";
+    private synchronized String getContent(Predicate<Integer> filter) {
+        StringBuilder output = new StringBuilder();
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
             byte[] buff = new byte[in.available()];
             int data;
-            while ((data = in.read(buff, 0, 1)) != 1) {
+            while ((data = in.read(buff, 0, 1)) != -1) {
                 if (filter.test(data)) {
-                    output += (char) data;
+                    output.append((char) data);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return output;
+        return output.toString();
+    }
+
+    public synchronized String getContent() {
+        return getContent(data -> true);
+    }
+
+    public synchronized String getContentWithoutUnicode() {
+        return getContent(data -> data < 128);
     }
 }
