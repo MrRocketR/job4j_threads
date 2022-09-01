@@ -13,9 +13,8 @@ public final class ParseFile {
     private synchronized String getContent(Predicate<Integer> filter) {
         StringBuilder output = new StringBuilder();
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
-            byte[] buff = new byte[in.available()];
             int data;
-            while ((data = in.read(buff, 0, 1)) != -1) {
+            while ((data = in.read()) != -1) {
                 if (filter.test(data)) {
                     output.append((char) data);
                 }
