@@ -12,23 +12,24 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private Queue<T> queue = new LinkedList<>();
 
-    private int count = 0;
+    private final int count;
 
-    public SimpleBlockingQueue(int count) {
-        this.count = count;
+    public SimpleBlockingQueue(int n) {
+        this.count = n;
     }
 
     public void offer(T value) {
         synchronized (queue) {
-            queue.notify();
-            while (queue.peek() == null) {
-                queue.add(value);
-                System.out.println("added " + value);
-            }
             try {
-                queue.wait();
+                while (queue.size() == count) {
+                    System.out.println("Queue is full!");
+                    queue.wait();
+                }
+                queue.add(value);
+                System.out.println("Added " + value);
+                queue.notify();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -36,13 +37,14 @@ public class SimpleBlockingQueue<T> {
     public T poll() {
         T r = null;
         synchronized (queue) {
-            queue.notify();
-            while (queue.peek() != null) {
-                r =  queue.poll();
-                System.out.println("Polled" + r);
-            }
             try {
-                queue.wait();
+                while (queue.size() == 0) {
+                    System.out.println("Queue is empty!");
+                    queue.wait();
+                }
+                r = queue.poll();
+                System.out.println("Polled = " + r);
+                queue.notify();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
