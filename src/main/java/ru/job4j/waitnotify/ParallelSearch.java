@@ -4,15 +4,7 @@ public class ParallelSearch {
 
     public static void main(String[] args) {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<Integer>(5);
-        final Thread consumer = new Thread(
-                () -> {
-                    while (true) {
-                        System.out.println(queue.poll());
-                    }
-                }
-        );
-        consumer.start();
-        new Thread(
+        Thread producer  = new Thread(
                 () -> {
                     for (int index = 0; index != 3; index++) {
                         queue.offer(index);
@@ -24,6 +16,15 @@ public class ParallelSearch {
                     }
                 }
 
-        ).start();
+        );
+        producer.start();
+        final Thread consumer = new Thread(
+                () -> {
+                    while (producer.getState() == Thread.State.RUNNABLE) {
+                        System.out.println(queue.poll());
+                    }
+                }
+        );
+        consumer.start();
     }
 }
