@@ -14,18 +14,17 @@ public class CountBarrier {
     public void count() {
         synchronized (monitor) {
             count++;
-            await();
             monitor.notifyAll();
         }
     }
 
     public void await() {
         synchronized (monitor) {
-            while (count >= total) {
+            while (count != total) {
                 try {
                     monitor.wait();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         }
