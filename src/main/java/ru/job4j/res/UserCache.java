@@ -2,6 +2,7 @@ package ru.job4j.res;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,8 +22,11 @@ public class UserCache {
     }
 
     public List<User> findAll() {
-        return users.values().stream().collect(
-        Collectors.toCollection(ArrayList::new));
+        List<User> list = new ArrayList<>();
+        for (Map.Entry<Integer, User> entry : users.entrySet()) {
+            list.add(User.of(entry.getValue().getName()));
+        }
+        return list;
     }
 
     public static void main(String[] args) {
