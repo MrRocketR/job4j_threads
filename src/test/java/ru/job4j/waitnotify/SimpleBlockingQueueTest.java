@@ -1,34 +1,42 @@
 package ru.job4j.waitnotify;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.IntStream;
+
 import static org.junit.Assert.*;
 
 public class SimpleBlockingQueueTest {
-
-
     @Test
-    public void threadTest() throws InterruptedException {
-        SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue(10);
-        Thread producer = new Thread(() -> {
-            for (int i = 0; i <= 1000; i++) {
-                simpleBlockingQueue.offer(i);
-                i++;
-            }
-        });
-        Thread consumer = new Thread(() -> {
-            for (int i = 0; i <= 1000; i++) {
-                simpleBlockingQueue.poll();
-                i++;
-            }
-        });
+    public void whenFetchAllThenGetIt() throws InterruptedException {
+        final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
+        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
+        Thread producer = new Thread(
+                () -> {
+                    IntStream.range(0, 5).forEach(
+                            queue::offer
+                    );
+                }
+        );
         producer.start();
+        Thread consumer = new Thread(
+                () -> {
+                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
+                        buffer.add(queue.poll());
+                    }
+                }
+        );
         consumer.start();
         producer.join();
+        consumer.interrupt();
         consumer.join();
+        Assert.assertEquals(buffer, Arrays.asList(0, 1, 2, 3, 4));
     }
-
-
 }
+
