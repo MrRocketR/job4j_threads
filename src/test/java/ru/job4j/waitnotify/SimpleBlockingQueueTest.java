@@ -11,7 +11,7 @@ public class SimpleBlockingQueueTest {
 
     @Test
     public void threadTest() throws InterruptedException {
-        SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue(3);
+        SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue(10);
         Thread producer = new Thread(() -> {
             for (int i = 0; i <= 1000; i++) {
                 simpleBlockingQueue.offer(i);
