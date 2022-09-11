@@ -1,12 +1,9 @@
 package ru.job4j.res;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+
 
 
 public class UserCache {
@@ -22,15 +19,12 @@ public class UserCache {
     }
 
     public List<User> findAll() {
+        Collection<User> collection = users.values();
         List<User> list = new ArrayList<>();
-        for (Map.Entry<Integer, User> entry : users.entrySet()) {
-            list.add(User.of(entry.getValue().getName()));
+        for (User u: collection) {
+            list.add(User.of(u.getName()));
         }
         return list;
-    }
-
-    public static void main(String[] args) {
-
     }
 }
 
