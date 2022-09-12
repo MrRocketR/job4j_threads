@@ -25,12 +25,12 @@ public class SimpleBlockingQueue<T> {
                     System.out.println("Queue is full!");
                     queue.wait();
                 }
-                queue.add(value);
-                System.out.println("Added " + value);
-                queue.notify();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            queue.add(value);
+            System.out.println("Added " + value);
+            queue.notify();
         }
     }
 
@@ -42,12 +42,12 @@ public class SimpleBlockingQueue<T> {
                     System.out.println("Queue is empty!");
                     queue.wait();
                 }
-                r = queue.poll();
-                System.out.println("Polled = " + r);
-                queue.notify();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            r = queue.poll();
+            System.out.println("Polled = " + r);
+            queue.notify();
         }
        return r;
     }
