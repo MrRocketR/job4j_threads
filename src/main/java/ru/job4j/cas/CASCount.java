@@ -26,10 +26,4 @@ public class CASCount {
         return count.get();
     }
 
-    public static void main(String[] args) {
-        CASCount count = new CASCount(0);
-        count.increment();
-        count.increment();
-        System.out.println(count.get());
-    }
 }
