@@ -1,16 +1,19 @@
 package ru.job4j.waitnotify;
 
 public class ParallelSearch {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args)  {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(10);
         final Thread consumer = new Thread(
                 () -> {
                     while (!Thread.currentThread().isInterrupted()) {
-                        System.out.println(queue.poll());
+                        try {
+                            queue.poll();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().isInterrupted();
+                        }
                     }
                 }
         );
-        consumer.start();
         Thread producer = new Thread(
                 () -> {
                     for (int index = 0; index != 3; index++) {
@@ -24,7 +27,13 @@ public class ParallelSearch {
                     consumer.interrupt();
                 }
         );
-        producer.start();
-        producer.join();
+
+        try {
+            consumer.start();
+            producer.start();
+            producer.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

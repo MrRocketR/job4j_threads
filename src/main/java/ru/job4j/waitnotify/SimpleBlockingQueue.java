@@ -18,38 +18,31 @@ public class SimpleBlockingQueue<T> {
         this.count = n;
     }
 
-    public void offer(T value) {
+    public void offer(T value) throws InterruptedException {
         synchronized (queue) {
-            try {
                 while (queue.size() == count) {
                     System.out.println("Queue is full!");
                     queue.wait();
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             queue.add(value);
             System.out.println("Added " + value);
             queue.notify();
         }
     }
 
-    public T poll() {
+    public T poll() throws InterruptedException {
         T r = null;
         synchronized (queue) {
-            try {
                 while (queue.size() == 0) {
                     System.out.println("Queue is empty!");
                     queue.wait();
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             r = queue.poll();
             System.out.println("Polled = " + r);
             queue.notify();
         }
-       return r;
+        return r;
     }
 
     public boolean isEmpty() {

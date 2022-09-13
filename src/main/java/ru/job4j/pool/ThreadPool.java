@@ -10,10 +10,8 @@ public class ThreadPool {
     private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(10);
 
     public void work(Runnable job) {
-        tasks.offer(job);
     }
 
     public void shutdown() {
-            tasks.poll();
     }
 }
