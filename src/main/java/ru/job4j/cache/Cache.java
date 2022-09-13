@@ -11,8 +11,10 @@ public class Cache {
         return memory.putIfAbsent(model.getId(), model) == null;
     }
 
-    public void update(Base model) throws OptimisticException {
-        memory.computeIfPresent(
+    public boolean update(Base model) throws OptimisticException {
+        int k = model.getId();
+        boolean output = false;
+         memory.computeIfPresent(
                 model.getId(),
                 (key, value) -> {
                     if (model.getVersion() != value.getVersion()) {
@@ -20,10 +22,15 @@ public class Cache {
                                 "Versions don't match!"
                         );
                     }
-                    model.setVersion(model.getVersion() + 1);
-                    return model;
+                    memory.replace(model.getId(),
+                           new Base(model.getId(), model.getVersion() + 1));
+                    return memory.get(model.getId());
                 }
         );
+         if (memory.get(k)  != null) {
+             output = true;
+         }
+       return output;
     }
 
     public Base delete(Base model) {
