@@ -2,7 +2,7 @@ package ru.job4j.cache;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
+
 
 public class Cache {
     private final Map<Integer, Base> memory = new ConcurrentHashMap<>();
@@ -12,9 +12,7 @@ public class Cache {
     }
 
     public boolean update(Base model) throws OptimisticException {
-        int k = model.getId();
-        boolean output = false;
-         memory.computeIfPresent(
+       Base out =  memory.computeIfPresent(
                 model.getId(),
                 (key, value) -> {
                     if (model.getVersion() != value.getVersion()) {
@@ -22,16 +20,15 @@ public class Cache {
                                 "Versions don't match!"
                         );
                     }
-                    memory.replace(model.getId(),
-                           new Base(model.getId(), model.getVersion() + 1));
-                    return memory.get(model.getId());
+                    Base base = new Base(model.getId(), model.getVersion() + 1);
+                    base.setName(model.getName());
+                    return base;
                 }
         );
-         if (memory.get(k)  != null) {
-             output = true;
-         }
-       return output;
-    }
+        return out != null;
+        }
+
+
 
     public Base delete(Base model) {
         return memory.remove(model.getId());

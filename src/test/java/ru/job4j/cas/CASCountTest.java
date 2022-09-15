@@ -3,9 +3,6 @@ package ru.job4j.cas;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import static org.junit.Assert.*;
 
 public class CASCountTest {
 
