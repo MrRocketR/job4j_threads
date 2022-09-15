@@ -18,7 +18,6 @@ public class EmailNotification {
         String body = "Add a new event to "
                 + user.getUsername();
         pool.submit(() -> send(subject, body, user.getEmail()));
-        close();
     }
 
     private void send(String subject, String body, String email) {
@@ -27,6 +26,13 @@ public class EmailNotification {
 
     public void close() {
         pool.shutdown();
+        while (!pool.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
