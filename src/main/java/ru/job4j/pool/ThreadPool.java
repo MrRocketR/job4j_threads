@@ -14,7 +14,12 @@ public class ThreadPool {
         for (int i = 0; i < size; i++) {
             Thread t = (new Thread(() -> {
                 while (!Thread.currentThread().isInterrupted()) {
-                    System.out.println(Thread.currentThread().getName() + " " + Thread.currentThread().getState());
+                    try {
+                        tasks.poll().run();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             ));
@@ -25,7 +30,7 @@ public class ThreadPool {
 
 
     public void work(Runnable job) throws InterruptedException {
-        tasks.offer(job);
+            tasks.offer(job);
     }
 
     public void shutdown() {
