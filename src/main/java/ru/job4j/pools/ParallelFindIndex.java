@@ -19,32 +19,51 @@ public class ParallelFindIndex  extends RecursiveTask<Integer> {
         this.required = required;
     }
 
-    private Integer findLinear(Integer[] array,  Integer t) {
+    private Integer findLinear() {
         for (int i = start; i < end; i++) {
-             if (array[i].equals(t)) {
-                return t;
+             if (array[i].equals(required)) {
+                return i;
             }
         }
-        return null;
+        return -1;
+    }
+
+    private static Integer find(int[] arr, int number) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] == number) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 
     @Override
     protected  Integer compute() {
         if (array.length <= 10) {
-            return findLinear(array, required);
+            return findLinear();
         }
-        ParallelFindIndex first = new ParallelFindIndex(array, start, end, required);
+        ParallelFindIndex first = new ParallelFindIndex(array, start, array.length / 2, required);
         first.fork();
-        return first.findLinear(array, required);
+        ParallelFindIndex second = new ParallelFindIndex(array, array.length / 2, array.length - 1, required);
+        second.fork();
+        Integer n1 = first.join();
+        Integer n2 = second.join();
+        return Math.max(n1, n2);
     }
 
     public static void main(String[] args) {
        Integer[] array = new Integer[] {1, 11, 45, 11, 65, 77, 88,
                 22, 54, 100, 145, 123, 77,
                 88, 222, 500, 700, 666, 777, 888};
-        ParallelFindIndex parallelFindIndex = new ParallelFindIndex(array, 0, 21, 500);
+        ParallelFindIndex parallelFindIndex = new ParallelFindIndex(array, 0, 21, 700);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         System.out.println(forkJoinPool.invoke(parallelFindIndex));
     }
 }
+
+/*
+так весь код тут для красоты, на ветки никакого деления нет, надо добавлять 2 таких блока.
+ Нужен вызов join чтобы получить из вычислений результат.
+ И потом полученный из двух веток надо вернуть максимум из двух
+ */
