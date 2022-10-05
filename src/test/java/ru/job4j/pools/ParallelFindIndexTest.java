@@ -6,20 +6,18 @@ import org.junit.Test;
 
 import java.util.concurrent.ForkJoinPool;
 
-import static org.junit.Assert.*;
-
 public class ParallelFindIndexTest {
 
-    @Ignore
     @Test
     public void whenFound() {
-        Integer[] array = new Integer[] {1, 11, 45, 11, 65, 77, 88,
+        Integer[] array = new Integer[]{1, 11, 45, 11, 65, 77, 88,
                 22, 54, 100, 145, 123, 77,
-                88, 222, 500, 700, 666, 777, 888};
+                88, 222, 500, 700, 666, 777, 888, 1000, 565, 976, 100, 45};
         Integer req = 500;
-        ParallelFindIndex parallelFindIndex = new ParallelFindIndex(array, 0, 21, req);
+        Integer result = 15;
+        ParallelFindIndex parallelFindIndex = new ParallelFindIndex(array, array[0], array.length, req);
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        Assert.assertEquals(forkJoinPool.invoke(parallelFindIndex), req);
+        Assert.assertEquals(forkJoinPool.invoke(parallelFindIndex), result);
     }
 
 }
