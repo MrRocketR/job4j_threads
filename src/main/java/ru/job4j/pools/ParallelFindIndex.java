@@ -2,14 +2,14 @@ package ru.job4j.pools;
 
 import java.util.concurrent.RecursiveTask;
 
-public class ParallelFindIndex extends RecursiveTask<Integer> {
-    private final Integer[] array;
-    private final Integer start;
-    private final Integer end;
-    private final Integer required;
-    private final Integer threshold = 10;
+public class ParallelFindIndex<T> extends RecursiveTask<Integer> {
+    private final T[] array;
+    private final int start;
+    private final int end;
+    private final T required;
+    private final int threshold = 10;
 
-    public ParallelFindIndex(Integer[] array, Integer start, Integer end, Integer required) {
+    public ParallelFindIndex(T[] array, int start, int end, T required) {
         this.array = array;
         this.start = start;
         this.end = end;
@@ -25,9 +25,9 @@ public class ParallelFindIndex extends RecursiveTask<Integer> {
         return -1;
     }
 
-    private static Integer find(Integer[] arr, Integer number) {
+    private static Integer find(Integer[] arr, Integer req) {
         for (int i = 0; i < arr.length - 1; i++) {
-            if (arr[i].equals(number)) {
+            if (arr[i].equals(req)) {
                 return i;
             }
         }
@@ -39,14 +39,13 @@ public class ParallelFindIndex extends RecursiveTask<Integer> {
     protected Integer compute() {
         if (end - start <= threshold) {
             return findLinear();
-        } else {
-            int mid = (end + start) / 2;
-            ParallelFindIndex first = new ParallelFindIndex(array, start, mid, required);
-            ParallelFindIndex second = new ParallelFindIndex(array, mid + 1, array.length - 1, required);
-            first.fork();
-            second.fork();
-            return Math.max(first.join(), second.join());
         }
+        int mid = (end + start) / 2;
+        ParallelFindIndex first = new ParallelFindIndex(array, start, mid, required);
+        ParallelFindIndex second = new ParallelFindIndex(array, mid + 1, array.length - 1, required);
+        first.fork();
+        second.fork();
+        return Math.max((Integer) first.join(), second.compute());
     }
 }
 
