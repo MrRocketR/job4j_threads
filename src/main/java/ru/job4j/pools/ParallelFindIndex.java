@@ -1,5 +1,6 @@
 package ru.job4j.pools;
 
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 public class ParallelFindIndex<T> extends RecursiveTask<Integer> {
@@ -25,13 +26,9 @@ public class ParallelFindIndex<T> extends RecursiveTask<Integer> {
         return -1;
     }
 
-    private static Integer find(Integer[] arr, Integer req) {
-        for (int i = 0; i < arr.length - 1; i++) {
-            if (arr[i].equals(req)) {
-                return i;
-            }
-        }
-        return -1;
+    public static <T> int findIndex(T[] array, T required) {
+        ForkJoinPool pool = new ForkJoinPool();
+        return pool.invoke(new ParallelFindIndex<>(array, 0, array.length - 1, required));
     }
 
 
@@ -41,11 +38,11 @@ public class ParallelFindIndex<T> extends RecursiveTask<Integer> {
             return findLinear();
         }
         int mid = (end + start) / 2;
-        ParallelFindIndex first = new ParallelFindIndex(array, start, mid, required);
-        ParallelFindIndex second = new ParallelFindIndex(array, mid + 1, array.length - 1, required);
+        ParallelFindIndex<T> first = new ParallelFindIndex<>(array, start, mid, required);
+        ParallelFindIndex<T> second = new ParallelFindIndex<>(array, mid + 1, end, required);
         first.fork();
         second.fork();
-        return Math.max((Integer) first.join(), second.compute());
+        return Math.max(first.join(), second.join());
     }
 }
 

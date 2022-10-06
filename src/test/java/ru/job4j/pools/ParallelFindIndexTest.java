@@ -14,10 +14,9 @@ public class ParallelFindIndexTest {
                 22, 54, 100, 145, 123, 77,
                 88, 222, 500, 700, 666, 777, 888, 1000, 565, 976, 100, 45};
         Integer req = 500;
-        Integer result = 15;
-        ParallelFindIndex parallelFindIndex = new ParallelFindIndex(array, array[0], array.length, req);
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        Assert.assertEquals(forkJoinPool.invoke(parallelFindIndex), result);
+        Integer expected = 15;
+        Integer result = ParallelFindIndex.findIndex(array, req);
+        Assert.assertEquals(expected, result);
     }
 
 }
