@@ -1,6 +1,10 @@
 package ru.job4j.async;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class RolColSum {
     public static class Sums {
@@ -9,22 +13,6 @@ public class RolColSum {
 
         public Sums(int rowSum, int colSum) {
             this.rowSum = rowSum;
-            this.colSum = colSum;
-        }
-
-        public int getRowSum() {
-            return rowSum;
-        }
-
-        public void setRowSum(int rowSum) {
-            this.rowSum = rowSum;
-        }
-
-        public int getColSum() {
-            return colSum;
-        }
-
-        public void setColSum(int colSum) {
             this.colSum = colSum;
         }
 
@@ -45,6 +33,24 @@ public class RolColSum {
             }
             return rsl;
         }
+
+        public static Sums[] asyncSum(int[][] matrix) throws ExecutionException, InterruptedException {
+            Sums[] rsl = new Sums[matrix.length];
+            List<CompletableFuture> futures  = new ArrayList<>();
+            for (int row = 0; row < matrix.length; row++) {
+                futures.add(RolColSum.Sums.getSum(matrix, row));
+            }
+            for (int i = 0; i < futures.size(); i++) {
+                rsl[i] = (Sums) futures.get(i).get();
+            }
+            return rsl;
+        }
+
+
+        private static CompletableFuture<Sums> getSum(int[][] matrix, int row) {
+            return CompletableFuture.supplyAsync(() -> linearSum(matrix, row));
+        }
+
 
         @Override
         public String toString() {
@@ -67,12 +73,25 @@ public class RolColSum {
         public int hashCode() {
             return Objects.hash(rowSum, colSum);
         }
+
+
+    public int getRowSum() {
+        return rowSum;
     }
 
-    public static Sums[] asyncSum(int[][] matrix) {
-        return null;
+    public void setRowSum(int rowSum) {
+        this.rowSum = rowSum;
     }
 
+    public int getColSum() {
+        return colSum;
+    }
+
+    public void setColSum(int colSum) {
+        this.colSum = colSum;
+    }
+
+}
 
     public static void main(String[] args) {
         int[][] matrix = new int[10][2];
