@@ -36,7 +36,7 @@ public class RolColSum {
 
         public static Sums[] asyncSum(int[][] matrix) throws ExecutionException, InterruptedException {
             Sums[] rsl = new Sums[matrix.length];
-            List<CompletableFuture> futures  = new ArrayList<>();
+            List<CompletableFuture> futures = new ArrayList<>();
             for (int row = 0; row < matrix.length; row++) {
                 futures.add(RolColSum.Sums.getSum(matrix, row));
             }
@@ -54,16 +54,19 @@ public class RolColSum {
 
         @Override
         public String toString() {
-            return "Sums{" +
-                    "rowSum=" + rowSum +
-                    ", colSum=" + colSum +
-                    '}';
+            return "Sums{" + "rowSum="
+                    + rowSum + ", colSum=" +
+                    colSum + '}';
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             Sums sums = (Sums) o;
             return rowSum == sums.rowSum &&
                     colSum == sums.colSum;
@@ -75,26 +78,20 @@ public class RolColSum {
         }
 
 
-    public int getRowSum() {
-        return rowSum;
-    }
+        public int getRowSum() {
+            return rowSum;
+        }
 
-    public void setRowSum(int rowSum) {
-        this.rowSum = rowSum;
-    }
+        public void setRowSum(int rowSum) {
+            this.rowSum = rowSum;
+        }
 
-    public int getColSum() {
-        return colSum;
-    }
+        public int getColSum() {
+            return colSum;
+        }
 
-    public void setColSum(int colSum) {
-        this.colSum = colSum;
-    }
-
-}
-
-    public static void main(String[] args) {
-        int[][] matrix = new int[10][2];
-        System.out.println(matrix.length);
+        public void setColSum(int colSum) {
+            this.colSum = colSum;
+        }
     }
 }
