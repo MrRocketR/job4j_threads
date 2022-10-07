@@ -55,8 +55,8 @@ public class RolColSum {
         @Override
         public String toString() {
             return "Sums{" + "rowSum="
-                    + rowSum + ", colSum=" +
-                    colSum + '}';
+                    + rowSum + ", colSum="
+                    + colSum + '}';
         }
 
         @Override
@@ -68,8 +68,8 @@ public class RolColSum {
                 return false;
             }
             Sums sums = (Sums) o;
-            return rowSum == sums.rowSum &&
-                    colSum == sums.colSum;
+            return rowSum == sums.rowSum
+                    && colSum == sums.colSum;
         }
 
         @Override
