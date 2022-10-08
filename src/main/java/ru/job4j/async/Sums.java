@@ -6,8 +6,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class RolColSum {
-    public static class Sums {
+public class Sums {
         private int rowSum;
         private int colSum;
 
@@ -38,7 +37,7 @@ public class RolColSum {
             Sums[] rsl = new Sums[matrix.length];
             List<CompletableFuture> futures = new ArrayList<>();
             for (int row = 0; row < matrix.length; row++) {
-                futures.add(RolColSum.Sums.getSum(matrix, row));
+                futures.add(getSum(matrix, row));
             }
             for (int i = 0; i < futures.size(); i++) {
                 rsl[i] = (Sums) futures.get(i).get();
@@ -94,4 +93,4 @@ public class RolColSum {
             this.colSum = colSum;
         }
     }
-}
+
