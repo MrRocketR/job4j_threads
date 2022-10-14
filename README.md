@@ -15,7 +15,7 @@
 
 3.1.4. Wait, Notify, NotifyAll
 
-3.1.5. Non Blocking Algoritm
+3.1.5. Non Blocking Algorithm
 
 3.1.6. Пулы
 
