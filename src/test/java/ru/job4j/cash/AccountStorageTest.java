@@ -1,12 +1,11 @@
 package ru.job4j.cash;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+import ru.job4j.synch.cash.Account;
+import ru.job4j.synch.cash.AccountStorage;
 
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 public class AccountStorageTest {
 

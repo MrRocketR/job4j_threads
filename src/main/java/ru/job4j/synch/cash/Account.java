@@ -1,4 +1,4 @@
-package ru.job4j.cash;
+package ru.job4j.synch.cash;
 
 import java.util.Objects;
 
