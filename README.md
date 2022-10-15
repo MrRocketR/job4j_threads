@@ -15,10 +15,12 @@
 
 3.1.4. Wait, Notify, NotifyAll
 
-3.1.5. Non Blocking Algorithm
+3.1.5. Non Blocking Algoritm
 
 3.1.6. Пулы
 
 3.1.7. Контрольные вопросы
 
 В курсе производилась работа с ветками git.
+
+task_124176
